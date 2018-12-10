@@ -1,0 +1,9 @@
+POST http://localhost:3003/api/blogs
+content-type:application/json
+
+{
+    "title": "Blogilistan testausta",
+    "author": "Jarmo Kuusisto",
+    "url": "blogi_1",
+    "likes": 0
+}
