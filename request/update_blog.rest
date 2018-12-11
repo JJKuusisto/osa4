@@ -1,0 +1,9 @@
+PUT http://localhost:3001/api/blogs/5c0f4cb272dba200c4cc2b64
+content-type:application/json
+
+{
+    "author": "Jarmo Kuusisto",
+    "title": "Testiblogi päivitys2",
+    "url": "http://blog.cleancoder.com/uncle-bob/2016/05/01/TypeWars.html",
+    "likes": 6
+}
