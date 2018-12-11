@@ -1,9 +1,7 @@
-POST http://localhost:3003/api/blogs
+POST http://localhost:3001/api/blogs
 content-type:application/json
 
 {
-    "title": "Blogi2",
     "author": "Jarmo Kuusisto",
-    "url": "blogi_2",
-    "likes": 0
+    "likes": 1
 }
