@@ -1,6 +1,7 @@
 const supertest = require('supertest')
 const { app, server } = require('../index')
 const Blog = require('../models/blog')
+const User = require('../models/user')
 const api = supertest(app)
 const helper = require('./test_helper')
 
@@ -8,10 +9,10 @@ const helper = require('./test_helper')
 
 beforeAll(async() => {
     await Blog.remove({})
-
     const blogObjects = helper.initialBlogs.map(blog => new Blog(blog))
     const promiseArray = blogObjects.map(blog => blog.save())
     await Promise.all(promiseArray)
+    
     
 })
 
@@ -80,6 +81,104 @@ test('title and url missing', async () => {
     
     
 })
+
+describe('user creation related tests', async () => {
+
+    beforeAll(async () => {
+        await User.remove({username: 'jarmokuu'})
+        await User.remove({username: 'annivir'})
+      })
+  
+    test('POST /api/users succeeds with a fresh username', async () => {
+      const usersBeforeOperation = await helper.usersInDb()
+  
+      const newUser = {
+        username: 'jarmokuu',
+        name: 'Jarmo Kuusisto',
+        password: 'salasana',
+        adult:true
+      }
+  
+      await api
+        .post('/api/users')
+        .send(newUser)
+        .expect(200)
+        .expect('Content-Type', /application\/json/)
+  
+      const usersAfterOperation = await helper.usersInDb()
+      expect(usersAfterOperation.length).toBe(usersBeforeOperation.length+1)
+      const usernames = usersAfterOperation.map(u=>u.username)
+      expect(usernames).toContain(newUser.username)
+    })
+
+    test('POST api/users fails when user already exists', async () => {
+        const usersBeforeOperation = await helper.usersInDb()
+
+        const newUser = {
+            username: 'jarmokuu',
+            name: 'Jarmo Kuusisto',
+            password: 'salasana',
+            adult: true
+        }
+
+        const result = await api
+        .post('/api/users')
+        .send(newUser)
+        .expect(400)
+        .expect('Content-Type', /application\/json/)
+
+        expect(result.body).toEqual({ error: 'username must be unique and password atleast 3 characters'})
+
+        const usersAfterOperation = await helper.usersInDb()
+        expect(usersAfterOperation.length).toBe(usersBeforeOperation.length)
+
+    })
+
+    test('POST api/users fails if password is under 3 characters', async () => {
+        const usersBeforeOperation = await helper.usersInDb()
+
+        const newUser = {
+            username: 'pekkakoi',
+            name: 'Pekka Koivunen',
+            password: 'pw',
+            adult: true
+        }
+
+        const result = await api
+        .post('/api/users')
+        .send(newUser)
+        .expect(400)
+        .expect('Content-Type', /application\/json/)
+
+        expect(result.body).toEqual({ error: 'username must be unique and password atleast 3 characters'})
+
+        const usersAfterOperation = await helper.usersInDb()
+        expect(usersAfterOperation.length).toBe(usersBeforeOperation.length)
+
+    })
+
+    test('POST api/users without adult defined', async () => {
+        const usersBeforeOperation = await helper.usersInDb()
+
+        const newUser = {
+            username: 'annivir',
+            name: 'Anni Virtanen',
+            password: 'classified'
+        }
+
+        const result = await api
+        .post('/api/users')
+        .send(newUser)
+        .expect(200)
+        .expect('Content-Type', /application\/json/)
+
+        expect(result.body.adult).toEqual(true)
+
+        const usersAfterOperation = await helper.usersInDb()
+        expect(usersAfterOperation.length).toBe(usersBeforeOperation.length + 1)
+
+    })
+  })
 
 
 

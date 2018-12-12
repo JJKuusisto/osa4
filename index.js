@@ -7,6 +7,10 @@ const mongoose = require('mongoose')
 const blogsRouter = require('./controllers/blogs')
 const middleware = require('./utils/middleware')
 const config = require('./utils/config')
+const usersRouter = require('./controllers/users')
+const loginRouter = require('./controllers/login')
+
+
 
 
 
@@ -27,9 +31,13 @@ if (process.env.NODE_ENV !== 'production') {
   app.use(cors())
   app.use(bodyParser.json())
   app.use(middleware.logger)
+  app.use(middleware.tokenExtractor)
+  
   app.use('/api/blogs', blogsRouter)
-
+  app.use('/api/users', usersRouter)
+  app.use('/api/login', loginRouter)
   app.use(middleware.error)
+  
 
 
 

@@ -2,6 +2,8 @@ POST http://localhost:3001/api/blogs
 content-type:application/json
 
 {
+    "title": "Blogi, käyttäjätiedoilla2",
     "author": "Jarmo Kuusisto",
-    "likes": 1
+    "url": "http://blog.cleancoder.com/uncle-bob/2017/05/05/TestDefinitions.htmll",
+    "likes": 10
 }

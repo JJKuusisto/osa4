@@ -1,0 +1,10 @@
+POST http://localhost:3001/api/blogs
+content-type: application/json
+Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Imphcm1va3V1IiwiaWQiOiI1YzEwYjE5MjFlMzNlODJiZTQ3MzEyZmQiLCJpYXQiOjE1NDQ2MDYxNzN9.9YrIKrAEQUU0xRPgsCgsy26f6qXv5pMgr_-_QtoKClM
+
+{
+    "title": "testiblogi2",
+    "author": "Pekka Puupää",
+    "url": "http://blog.cleancoder.com/uncle-bob/2017/05/05/TestDefinitions.htmll",
+    "likes": 100
+}
